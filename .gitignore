@@ -1,0 +1,13 @@
+exec
+Makefile
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+cmake-build-debug 
+.idea
+.vscode
+.ipynb_checkpoints
+out.txt
+perf.data
+tmp
+libtorch
