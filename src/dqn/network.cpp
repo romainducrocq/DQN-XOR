@@ -1,12 +1,11 @@
 #include "dqn/network.hpp"
 
 /* TODO to conf */
-int64_t net_conf(int64_t input_dim, torch::nn::Sequential& net)
+void ctor_net(int64_t input_dim, std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net)
 {
     // NETWORK
-    std::vector<int64_t> hidden_dims = {
-        16, 16
-    };
+    hidden_dims.push_back(16);
+    hidden_dims.push_back(16);
 
     auto activation = torch::nn::ELU();
 
@@ -16,15 +15,15 @@ int64_t net_conf(int64_t input_dim, torch::nn::Sequential& net)
         torch::nn::Linear(hidden_dims[0], hidden_dims[1]),
         activation
     );
-
-    return hidden_dims.back();
 }
 /**/
 
 Network::Net::Net(const torch::Device& device)
     : device(device)
 {
-    this->fc_out_dim = net_conf(this->input_dim, this->net);
+    std::vector<int64_t> h_dims;
+    ctor_net(this->input_dim, h_dims, this->net);
+    this->fc_out_dim = h_dims[h_dims.size() - 1];
     this->net = register_module("net", this->net);
 }
 
