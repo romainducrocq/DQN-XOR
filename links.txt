@@ -6,3 +6,4 @@ https://pytorch.org/tutorials/advanced/cpp_frontend.html
 https://stackoverflow.com/questions/71176554/pytorch-c-frontend-registering-new-modules-and-using-them-during-forward
 https://stackoverflow.com/questions/58631466/create-a-torchtensor-from-c-c-array-without-using-from-blob
 https://medium.com/crim/from-pytorch-to-libtorch-tips-and-tricks-dc45b6c1b1ac
+https://stackoverflow.com/questions/63531428/convert-c-vectorvectorfloat-to-torchtensor

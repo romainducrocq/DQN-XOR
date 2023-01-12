@@ -59,7 +59,7 @@ namespace Network
     class Net : public torch::nn::Module
     {
         protected:
-            int64_t input_dim = CONF::INPUTS;
+            const std::vector<int64_t>& input_dim = CONF::INPUTS;
             int64_t output_dim = CONF::OUTPUTS;
             double lr = CONF::LR;
 
@@ -69,8 +69,8 @@ namespace Network
             std::shared_ptr<torch::optim::Optimizer> optimizer = nullptr;
             // torch::Tensor(*loss)(const torch::Tensor& self, const torch::Tensor& target) = nullptr;
 
-            void(*ctor_net)(int64_t input_dim, std::vector<int64_t>& hidden_dims,
-                    torch::nn::Sequential& net) = CONF::CTOR_NET;
+            void(*ctor_net)(const std::vector<int64_t>& input_dim,
+                std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net) = CONF::CTOR_NET;
 
             const torch::Device& device;
 

@@ -27,12 +27,13 @@ struct DefaultConf{
 
     static Mode MODE;
 
-    const static int64_t INPUTS;
+    const static std::vector<int64_t> INPUTS;
     const static int64_t OUTPUTS;
 
     const static double LR;
 
-    static void CTOR_NET(int64_t input_dim, std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net);
+    static void CTOR_NET(const std::vector<int64_t>& input_dim,
+        std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net);
 
     /*** DEC OPT PARAMS HERE */
 
@@ -88,14 +89,15 @@ typename DefaultConf<T>::Mode DefaultConf<T>::MODE = DefaultConf<T>::Mode::MAIN;
 
 /*** DEF OPT PARAMS HERE */
 template<typename T>
-const int64_t DefaultConf<T>::INPUTS = 3;
+const std::vector<int64_t> DefaultConf<T>::INPUTS = { 3 };
 template<typename T>
 const int64_t DefaultConf<T>::OUTPUTS = 2;
 template<typename T>
 const double DefaultConf<T>::LR = 0.01;
 
 template<typename T>
-void DefaultConf<T>::CTOR_NET(int64_t input_dim, std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net)
+void DefaultConf<T>::CTOR_NET(const std::vector<int64_t>& input_dim,
+     std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net)
 {
     for(const auto& l : { 16, 16 }){
         hidden_dims.push_back(l);
@@ -104,7 +106,7 @@ void DefaultConf<T>::CTOR_NET(int64_t input_dim, std::vector<int64_t>& hidden_di
     auto activation = torch::nn::ELU();
 
     net = torch::nn::Sequential(
-            torch::nn::Linear(input_dim, hidden_dims[0]),
+            torch::nn::Linear(input_dim[0], hidden_dims[0]),
             activation,
             torch::nn::Linear(hidden_dims[0], hidden_dims[1]),
             activation
