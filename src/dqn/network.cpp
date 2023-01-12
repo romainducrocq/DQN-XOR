@@ -1,29 +1,11 @@
 #include "dqn/network.hpp"
 
-/* TODO to conf */
-void ctor_net(int64_t input_dim, std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net)
-{
-    // NETWORK
-    hidden_dims.push_back(16);
-    hidden_dims.push_back(16);
-
-    auto activation = torch::nn::ELU();
-
-    net = torch::nn::Sequential(
-        torch::nn::Linear(input_dim, hidden_dims[0]),
-        activation,
-        torch::nn::Linear(hidden_dims[0], hidden_dims[1]),
-        activation
-    );
-}
-/**/
-
 Network::Net::Net(const torch::Device& device)
     : device(device)
 {
-    std::vector<int64_t> h_dims;
-    ctor_net(this->input_dim, h_dims, this->net);
-    this->fc_out_dim = h_dims[h_dims.size() - 1];
+    std::vector<int64_t> hidden_dims;
+    this->ctor_net(this->input_dim, hidden_dims, this->net);
+    this->fc_output_dim = hidden_dims[hidden_dims.size()-1];
 
     this->register_module("net", this->net);
 }
@@ -44,7 +26,7 @@ void Network::Net::example()
 Network::DeepQNet::DeepQNet(const torch::Device& device)
     : Network::Net(device)
 {
-    this->fc_out = torch::nn::Linear(this->fc_out_dim, this->output_dim);
+    this->fc_out = torch::nn::Linear(this->fc_output_dim, this->output_dim);
 
     this->register_module("fc_out", this->fc_out);
 
@@ -77,8 +59,8 @@ size_t Network::DeepQNet::action(std::vector<float>& obs)
 Network::DuelingDeepQNet::DuelingDeepQNet(const torch::Device& device)
     : Network::Net(device)
 {
-    this->fc_val = torch::nn::Linear(this->fc_out_dim, 1);
-    this->fc_adv = torch::nn::Linear(this->fc_out_dim, this->output_dim);
+    this->fc_val = torch::nn::Linear(this->fc_output_dim, 1);
+    this->fc_adv = torch::nn::Linear(this->fc_output_dim, this->output_dim);
 
     this->register_module("fc_val", this->fc_val);
     this->register_module("fc_adv", this->fc_adv);
