@@ -9,6 +9,7 @@
 
 namespace Network
 {
+    /*
     struct Optimizer
     {
         static inline void sgd(std::shared_ptr<torch::optim::Optimizer>& optimizer,
@@ -52,6 +53,7 @@ namespace Network
             return torch::huber_loss(self, target, torch::Reduction::Mean, 1.0);
         }
     };
+     */
 
     class Net : public torch::nn::Module
     {
@@ -64,12 +66,14 @@ namespace Network
 
             torch::nn::Sequential net = nullptr;
             std::shared_ptr<torch::optim::Optimizer> optimizer = nullptr;
-            torch::Tensor(*loss)(const torch::Tensor& self, const torch::Tensor& target) = nullptr;
+            // torch::Tensor(*loss)(const torch::Tensor& self, const torch::Tensor& target) = nullptr;
 
             const torch::Device& device;
 
         public:
             Net(const torch::Device& device);
+
+            // void example();
 
             /* TODO
             save
@@ -78,7 +82,7 @@ namespace Network
 
         protected:
             virtual torch::Tensor forward(torch::Tensor x) = 0;
-            virtual size_t action(const std::vector<float>& obs) = 0;
+            virtual size_t action(std::vector<float>& obs) = 0;
     };
 
     class DeepQNet : public Network::Net
@@ -86,27 +90,28 @@ namespace Network
         private:
             torch::nn::Linear fc_out { nullptr };
 
-        private:
-            torch::Tensor forward(torch::Tensor x) override;
-            size_t action(const std::vector<float>& obs) override;
-
         public:
             DeepQNet(const torch::Device& device);
+
+            torch::Tensor forward(torch::Tensor x) override;
+            size_t action(std::vector<float>& obs) override;
     };
 
     class DuelingDeepQNet : public Network::Net
     {
         private:
-            torch::nn::Linear fc_out { nullptr };
+            torch::nn::Linear fc_val { nullptr };
+            torch::nn::Linear fc_adv { nullptr };
 
         private:
-            torch::Tensor forward(torch::Tensor x) override;
-            size_t action(const std::vector<float>& obs) override;
+            torch::Tensor value(torch::Tensor x);
+            torch::Tensor advantages(torch::Tensor x);
 
         public:
             DuelingDeepQNet(const torch::Device& device);
 
-            // void example();
+            torch::Tensor forward(torch::Tensor x) override;
+            size_t action(std::vector<float>& obs) override;
     };
 }
 

@@ -26,7 +26,8 @@ namespace App
                 Logger::info("Hello world!");
 
                 torch::Device device(torch::cuda::is_available() ? torch::kCUDA : torch::kCPU);
-                Network::DeepQNet net(device);
+                Network::DeepQNet deepQNet(device);
+                Network::DuelingDeepQNet duelingDeepQNet(device);
                 // net.example();
             };
 
