@@ -86,7 +86,7 @@ namespace Network
 
         protected:
             virtual torch::Tensor forward(torch::Tensor x) = 0;
-            virtual size_t action(std::vector<float>& obs) = 0;
+            virtual int64_t action(std::vector<float>& obs) = 0;
     };
 
     class DeepQNet : public Network::Net
@@ -98,7 +98,7 @@ namespace Network
             DeepQNet(const torch::Device& device);
 
             torch::Tensor forward(torch::Tensor x) override;
-            size_t action(std::vector<float>& obs) override;
+            int64_t action(std::vector<float>& obs) override;
     };
 
     class DuelingDeepQNet : public Network::Net
@@ -115,7 +115,7 @@ namespace Network
             DuelingDeepQNet(const torch::Device& device);
 
             torch::Tensor forward(torch::Tensor x) override;
-            size_t action(std::vector<float>& obs) override;
+            int64_t action(std::vector<float>& obs) override;
     };
 }
 
