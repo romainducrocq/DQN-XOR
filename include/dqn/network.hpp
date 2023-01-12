@@ -81,7 +81,7 @@ namespace Network
             virtual size_t action(const std::vector<float>& obs) = 0;
     };
 
-    class DQNet : public Network::Net
+    class DeepQNet : public Network::Net
     {
         private:
             torch::nn::Linear fc_out { nullptr };
@@ -91,21 +91,23 @@ namespace Network
             size_t action(const std::vector<float>& obs) override;
 
         public:
-            DQNet(const torch::Device& device);
+            DeepQNet(const torch::Device& device);
     };
 
-    /*
-    class D3QNet : public Network::Net
+    class DuelingDeepQNet : public Network::Net
     {
         private:
+            torch::nn::Linear fc_out { nullptr };
+
+        private:
             torch::Tensor forward(torch::Tensor x) override;
+            size_t action(const std::vector<float>& obs) override;
 
         public:
-            D3QNet();
+            DuelingDeepQNet(const torch::Device& device);
 
-            void example();
+            // void example();
     };
-     */
 }
 
 #endif

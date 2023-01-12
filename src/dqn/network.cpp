@@ -32,8 +32,8 @@ Network::Net::Net(const torch::Device& device)
  * load
  * */
 
-Network::DQNet::DQNet(const torch::Device& device)
-        : Network::Net(device)
+Network::DeepQNet::DeepQNet(const torch::Device& device)
+    : Network::Net(device)
 {
     this->fc_out = torch::nn::Linear(this->fc_out_dim, this->output_dim);
     this->fc_out = register_module("fc_out", this->fc_out);
@@ -44,14 +44,14 @@ Network::DQNet::DQNet(const torch::Device& device)
     this->to(this->device);
 }
 
-torch::Tensor Network::DQNet::forward(torch::Tensor x)
+torch::Tensor Network::DeepQNet::forward(torch::Tensor x)
 {
     x = this->net->forward(x);
     x = this->fc_out->forward(x);
     return x;
 }
 
-size_t Network::DQNet::action(const std::vector<float>& obs)
+size_t Network::DeepQNet::action(const std::vector<float>& obs)
 {
     // https://github.com/pytorch/pytorch/blob/b3f0297a94977636fd90c0fe6fa9b971ff9f81e2/aten/src/ATen/native/quantized/cpu/conv_serialization.h#L116
     auto obs_t = torch::from_blob((float*)(obs.data()), static_cast<int64_t>(obs.size()),
@@ -64,17 +64,22 @@ size_t Network::DQNet::action(const std::vector<float>& obs)
     return action;
 }
 
-/*
-Network::D3QNet::D3QNet()
-    : Network::Net()
+Network::DuelingDeepQNet::DuelingDeepQNet(const torch::Device& device)
+    : Network::Net(device)
 {
 }
 
-torch::Tensor Network::D3QNet::forward(torch::Tensor x)
+torch::Tensor Network::DuelingDeepQNet::forward(torch::Tensor x)
 {
     return x;
 }
 
+size_t Network::DuelingDeepQNet::action(const std::vector<float>& obs)
+{
+    return obs.size();
+}
+
+/*
 void Network::D3QNet::example()
 {
     torch::Tensor tensor = torch::rand({2, 3});
