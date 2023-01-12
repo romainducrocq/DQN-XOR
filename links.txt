@@ -1,0 +1,8 @@
+https://tmaric.gitlab.io/posts/pytorch-sequential/
+https://discuss.pytorch.org/c/c/11
+https://stackoverflow.com/questions/60059438/how-to-translate-or-convert-code-from-python-pytorch-to-c-libtorch
+https://stackoverflow.com/questions/45402430/statically-casting-parent-to-child-c
+https://pytorch.org/tutorials/advanced/cpp_frontend.html
+https://stackoverflow.com/questions/71176554/pytorch-c-frontend-registering-new-modules-and-using-them-during-forward
+https://stackoverflow.com/questions/58631466/create-a-torchtensor-from-c-c-array-without-using-from-blob
+https://medium.com/crim/from-pytorch-to-libtorch-tips-and-tricks-dc45b6c1b1ac

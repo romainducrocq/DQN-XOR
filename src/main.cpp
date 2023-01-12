@@ -2,12 +2,13 @@
 #include <ctime>
 
 #include <gtest/gtest.h>
-#include <torch/torch.h>
 
 #include "conf.hpp"
 
 #include "utils/logger.hpp"
 #include "utils/timer.hpp"
+
+#include "dqn/network.hpp"
 
 namespace App
 {
@@ -24,8 +25,9 @@ namespace App
 
                 Logger::info("Hello world!");
 
-                torch::Tensor tensor = torch::rand({2, 3});
-  		std::cout << tensor << std::endl;
+                torch::Device device(torch::cuda::is_available() ? torch::kCUDA : torch::kCPU);
+                Network::DQNet net(device);
+                // net.example();
             };
 
         public:
