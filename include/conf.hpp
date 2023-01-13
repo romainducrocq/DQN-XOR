@@ -32,6 +32,9 @@ struct DefaultConf{
 
     const static double LR;
 
+    const static int64_t BS;
+    const static size_t MAX_MEM;
+
     static void CTOR_NET(const std::vector<int64_t>& input_dim,
         std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net);
 
@@ -94,6 +97,11 @@ template<typename T>
 const int64_t DefaultConf<T>::OUTPUTS = 2;
 template<typename T>
 const double DefaultConf<T>::LR = 0.01;
+
+template<typename T>
+const int64_t DefaultConf<T>::BS = 32;
+template<typename T>
+const size_t DefaultConf<T>::MAX_MEM = 1000000;
 
 template<typename T>
 void DefaultConf<T>::CTOR_NET(const std::vector<int64_t>& input_dim,

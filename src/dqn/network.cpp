@@ -46,7 +46,7 @@ torch::Tensor network::DeepQNetwork::forward(torch::Tensor x)
 
 int64_t network::DeepQNetwork::action(std::vector<float>& obs)
 {
-    auto obs_t = torch::from_blob(obs.data(), this->input_dim, // {static_cast<int64_t>(obs.size())},
+    auto obs_t = torch::from_blob(obs.data(), this->input_dim,
             torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
 
     auto q_values = this->forward(obs_t.unsqueeze(0));
@@ -97,7 +97,7 @@ torch::Tensor network::DuelingDeepQNetwork::advantages(torch::Tensor x)
 
 int64_t network::DuelingDeepQNetwork::action(std::vector<float>& obs)
 {
-    auto obs_t = torch::from_blob(obs.data(), this->input_dim, // {static_cast<int64_t>(obs.size())},
+    auto obs_t = torch::from_blob(obs.data(), this->input_dim,
             torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
 
     auto adv_q_values = this->advantages(obs_t.unsqueeze(0));

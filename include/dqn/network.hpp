@@ -63,7 +63,7 @@ namespace network
             int64_t output_dim = CONF::OUTPUTS;
             double lr = CONF::LR;
 
-            int64_t fc_output_dim = -1;
+            int64_t fc_output_dim = 0;
 
             torch::nn::Sequential net = nullptr;
             std::shared_ptr<torch::optim::Optimizer> optimizer = nullptr;
