@@ -11,9 +11,9 @@ void replayMemory::ReplayMemoryNaive::store_transition(
 }
 
 void replayMemory::ReplayMemoryNaive::sample_transition(
-        std::array<std::reference_wrapper<replayMemory::Transition>, CONF::BS> transitions)
+    std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions)
 {
-    for(size_t i = 0; i < transitions.size(); i++){
-        transitions[i] = this->replay_buffer.at(std::rand() % this->replay_buffer.size());
+    for(size_t i = 0; i < this->batch_size; i++){
+        transitions.push_back(std::ref(this->replay_buffer.at(std::rand() % this->replay_buffer.size())));
     }
 }

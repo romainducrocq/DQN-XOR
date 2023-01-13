@@ -29,6 +29,18 @@ namespace App
                 network::DeepQNetwork deepQNetwork(device);
                 network::DuelingDeepQNetwork duelingDeepQNetwork(device);
                 // net.example();
+
+                /*
+                std::array<float, 27> obs = { 0.f };
+                for(size_t i = 0; i < obs.size(); i++){
+                    obs[i] = static_cast<float>(i+1);
+                }
+                std::vector<int64_t> input_dim = { 3, 3, 3 };
+
+                torch::Tensor tensor = torch::from_blob(obs.data(), input_dim,
+                    torch::TensorOptions().dtype(torch::kFloat32)).clone(); // .to(this->device);
+                std::cout << tensor << std::endl;
+                 */
             };
 
         public:

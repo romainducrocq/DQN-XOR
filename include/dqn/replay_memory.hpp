@@ -5,7 +5,6 @@
 #include <functional>
 
 #include <vector>
-#include <array>
 #include <deque>
 
 #include "conf.hpp"
@@ -28,7 +27,7 @@ namespace replayMemory
     class ReplayMemory
     {
         protected:
-            int64_t batch_size = CONF::BS;
+            size_t batch_size = CONF::BS;
             size_t buffer_size = CONF::MAX_MEM;
 
         public:
@@ -38,7 +37,7 @@ namespace replayMemory
             virtual void store_transition(
                 std::vector<float>& obs, int64_t action, float rew, bool done, std::vector<float>& new_obs) = 0;
             virtual void sample_transition(
-                std::array<std::reference_wrapper<replayMemory::Transition>, CONF::BS> transitions) = 0;
+                std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions) = 0;
     };
 
     class ReplayMemoryNaive : public replayMemory::ReplayMemory
@@ -52,7 +51,7 @@ namespace replayMemory
             void store_transition(
                 std::vector<float>& obs, int64_t action, float rew, bool done, std::vector<float>& new_obs) override;
             void sample_transition(
-                std::array<std::reference_wrapper<replayMemory::Transition>, CONF::BS> transitions) override;
+                std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions) override;
     };
 }
 

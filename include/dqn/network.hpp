@@ -59,7 +59,6 @@ namespace network
     class Network : public torch::nn::Module
     {
         protected:
-            const std::vector<int64_t>& input_dim = CONF::INPUTS;
             int64_t output_dim = CONF::OUTPUTS;
             double lr = CONF::LR;
 
@@ -68,6 +67,8 @@ namespace network
             torch::nn::Sequential net = nullptr;
             std::shared_ptr<torch::optim::Optimizer> optimizer = nullptr;
             // torch::Tensor(*loss)(const torch::Tensor& self, const torch::Tensor& target) = nullptr;
+
+            const std::vector<int64_t>& input_dim = CONF::INPUT_DIM;
 
             void(*ctor_net)(const std::vector<int64_t>& input_dim,
                 std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net) = CONF::CTOR_NET;

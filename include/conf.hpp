@@ -27,13 +27,15 @@ struct DefaultConf{
 
     static Mode MODE;
 
-    const static std::vector<int64_t> INPUTS;
+    const static int64_t INPUTS;
     const static int64_t OUTPUTS;
 
     const static double LR;
 
-    const static int64_t BS;
+    const static size_t BS;
     const static size_t MAX_MEM;
+
+    const static std::vector<int64_t> INPUT_DIM;
 
     static void CTOR_NET(const std::vector<int64_t>& input_dim,
         std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net);
@@ -92,16 +94,19 @@ typename DefaultConf<T>::Mode DefaultConf<T>::MODE = DefaultConf<T>::Mode::MAIN;
 
 /*** DEF OPT PARAMS HERE */
 template<typename T>
-const std::vector<int64_t> DefaultConf<T>::INPUTS = { 3 };
+const int64_t DefaultConf<T>::INPUTS = 3;
 template<typename T>
 const int64_t DefaultConf<T>::OUTPUTS = 2;
 template<typename T>
 const double DefaultConf<T>::LR = 0.01;
 
 template<typename T>
-const int64_t DefaultConf<T>::BS = 32;
+const size_t DefaultConf<T>::BS = 32;
 template<typename T>
 const size_t DefaultConf<T>::MAX_MEM = 1000000;
+
+template<typename T>
+const std::vector<int64_t> DefaultConf<T>::INPUT_DIM = { 3 };
 
 template<typename T>
 void DefaultConf<T>::CTOR_NET(const std::vector<int64_t>& input_dim,
