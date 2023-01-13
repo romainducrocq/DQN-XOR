@@ -8,7 +8,7 @@
 
 #include "conf.hpp"
 
-namespace Network
+namespace network
 {
     /*
     struct Optimizer
@@ -56,7 +56,7 @@ namespace Network
     };
      */
 
-    class Net : public torch::nn::Module
+    class Network : public torch::nn::Module
     {
         protected:
             const std::vector<int64_t>& input_dim = CONF::INPUTS;
@@ -75,7 +75,7 @@ namespace Network
             const torch::Device& device;
 
         public:
-            Net(const torch::Device& device);
+            Network(const torch::Device& device);
 
             // void example();
 
@@ -89,19 +89,19 @@ namespace Network
             virtual int64_t action(std::vector<float>& obs) = 0;
     };
 
-    class DeepQNet : public Network::Net
+    class DeepQNetwork : public network::Network
     {
         private:
             torch::nn::Linear fc_out { nullptr };
 
         public:
-            DeepQNet(const torch::Device& device);
+            DeepQNetwork(const torch::Device& device);
 
             torch::Tensor forward(torch::Tensor x) override;
             int64_t action(std::vector<float>& obs) override;
     };
 
-    class DuelingDeepQNet : public Network::Net
+    class DuelingDeepQNetwork : public network::Network
     {
         private:
             torch::nn::Linear fc_val { nullptr };
@@ -112,7 +112,7 @@ namespace Network
             torch::Tensor advantages(torch::Tensor x);
 
         public:
-            DuelingDeepQNet(const torch::Device& device);
+            DuelingDeepQNetwork(const torch::Device& device);
 
             torch::Tensor forward(torch::Tensor x) override;
             int64_t action(std::vector<float>& obs) override;

@@ -97,18 +97,18 @@ const double DefaultConf<T>::LR = 0.01;
 
 template<typename T>
 void DefaultConf<T>::CTOR_NET(const std::vector<int64_t>& input_dim,
-     std::vector<int64_t>& hidden_dims, torch::nn::Sequential& net)
+     std::vector<int64_t>& fc_hid_dims, torch::nn::Sequential& net)
 {
     for(const auto& l : { 16, 16 }){
-        hidden_dims.push_back(l);
+        fc_hid_dims.push_back(l);
     }
 
     auto activation = torch::nn::ELU();
 
     net = torch::nn::Sequential(
-            torch::nn::Linear(input_dim[0], hidden_dims[0]),
+            torch::nn::Linear(input_dim[0], fc_hid_dims[0]),
             activation,
-            torch::nn::Linear(hidden_dims[0], hidden_dims[1]),
+            torch::nn::Linear(fc_hid_dims[0], fc_hid_dims[1]),
             activation
     );
 }

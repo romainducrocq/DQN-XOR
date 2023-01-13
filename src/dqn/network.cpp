@@ -1,11 +1,11 @@
 #include "dqn/network.hpp"
 
-Network::Net::Net(const torch::Device& device)
+network::Network::Network(const torch::Device& device)
     : device(device)
 {
-    std::vector<int64_t> hidden_dims;
-    this->ctor_net(this->input_dim, hidden_dims, this->net);
-    this->fc_output_dim = hidden_dims[hidden_dims.size()-1];
+    std::vector<int64_t> fc_hid_dims;
+    this->ctor_net(this->input_dim, fc_hid_dims, this->net);
+    this->fc_output_dim = fc_hid_dims[fc_hid_dims.size()-1];
 
     this->register_module("net", this->net);
 }
@@ -23,8 +23,8 @@ void Network::Net::example()
  * load
  * */
 
-Network::DeepQNet::DeepQNet(const torch::Device& device)
-    : Network::Net(device)
+network::DeepQNetwork::DeepQNetwork(const torch::Device& device)
+    : network::Network(device)
 {
     this->fc_out = torch::nn::Linear(this->fc_output_dim, this->output_dim);
 
@@ -37,14 +37,14 @@ Network::DeepQNet::DeepQNet(const torch::Device& device)
     this->to(this->device);
 }
 
-torch::Tensor Network::DeepQNet::forward(torch::Tensor x)
+torch::Tensor network::DeepQNetwork::forward(torch::Tensor x)
 {
     x = this->net->forward(x);
     x = this->fc_out->forward(x);
     return x;
 }
 
-int64_t Network::DeepQNet::action(std::vector<float>& obs)
+int64_t network::DeepQNetwork::action(std::vector<float>& obs)
 {
     auto obs_t = torch::from_blob(obs.data(), this->input_dim, // {static_cast<int64_t>(obs.size())},
             torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
@@ -56,8 +56,8 @@ int64_t Network::DeepQNet::action(std::vector<float>& obs)
     return action;
 }
 
-Network::DuelingDeepQNet::DuelingDeepQNet(const torch::Device& device)
-    : Network::Net(device)
+network::DuelingDeepQNetwork::DuelingDeepQNetwork(const torch::Device& device)
+    : network::Network(device)
 {
     this->fc_val = torch::nn::Linear(this->fc_output_dim, 1);
     this->fc_adv = torch::nn::Linear(this->fc_output_dim, this->output_dim);
@@ -72,7 +72,7 @@ Network::DuelingDeepQNet::DuelingDeepQNet(const torch::Device& device)
     this->to(this->device);
 }
 
-torch::Tensor Network::DuelingDeepQNet::forward(torch::Tensor x)
+torch::Tensor network::DuelingDeepQNetwork::forward(torch::Tensor x)
 {
     x = this->net->forward(x);
     auto val = this->fc_val->forward(x);
@@ -81,21 +81,21 @@ torch::Tensor Network::DuelingDeepQNet::forward(torch::Tensor x)
     return x;
 }
 
-torch::Tensor Network::DuelingDeepQNet::value(torch::Tensor x)
+torch::Tensor network::DuelingDeepQNetwork::value(torch::Tensor x)
 {
     x = this->net->forward(x);
     x = this->fc_val->forward(x);
     return x;
 }
 
-torch::Tensor Network::DuelingDeepQNet::advantages(torch::Tensor x)
+torch::Tensor network::DuelingDeepQNetwork::advantages(torch::Tensor x)
 {
     x = this->net->forward(x);
     x = this->fc_adv->forward(x);
     return x;
 }
 
-int64_t Network::DuelingDeepQNet::action(std::vector<float>& obs)
+int64_t network::DuelingDeepQNetwork::action(std::vector<float>& obs)
 {
     auto obs_t = torch::from_blob(obs.data(), this->input_dim, // {static_cast<int64_t>(obs.size())},
             torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);

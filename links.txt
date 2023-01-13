@@ -7,3 +7,4 @@ https://stackoverflow.com/questions/71176554/pytorch-c-frontend-registering-new-
 https://stackoverflow.com/questions/58631466/create-a-torchtensor-from-c-c-array-without-using-from-blob
 https://medium.com/crim/from-pytorch-to-libtorch-tips-and-tricks-dc45b6c1b1ac
 https://stackoverflow.com/questions/63531428/convert-c-vectorvectorfloat-to-torchtensor
+https://discuss.pytorch.org/t/converting-1-d-float-vector-to-c-h-w-tensor-in-c/126713
