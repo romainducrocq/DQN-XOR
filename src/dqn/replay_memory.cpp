@@ -10,7 +10,7 @@ void replayMemory::ReplayMemoryNaive::store_transition(
     }
 }
 
-void replayMemory::ReplayMemoryNaive::sample_transition(
+void replayMemory::ReplayMemoryNaive::sample_transitions(
     std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions)
 {
     for(size_t i = 0; i < this->batch_size; i++){

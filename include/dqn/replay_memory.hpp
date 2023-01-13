@@ -36,7 +36,7 @@ namespace replayMemory
         protected:
             virtual void store_transition(
                 std::vector<float>& obs, int64_t action, float rew, bool done, std::vector<float>& new_obs) = 0;
-            virtual void sample_transition(
+            virtual void sample_transitions(
                 std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions) = 0;
     };
 
@@ -50,7 +50,7 @@ namespace replayMemory
 
             void store_transition(
                 std::vector<float>& obs, int64_t action, float rew, bool done, std::vector<float>& new_obs) override;
-            void sample_transition(
+            void sample_transitions(
                 std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions) override;
     };
 }
