@@ -14,20 +14,20 @@ namespace replayMemory
     struct Transition
     {
         std::vector<float> obs = {};
+        std::vector<float> new_obs = {};
         int64_t action = 0;
         float rew = 0.f;
         bool done = false;
-        std::vector<float> new_obs = {};
 
         Transition() = default;
-        Transition(std::vector<float> obs, int64_t action, float rew, bool done, std::vector<float> new_obs)
-            : obs(std::move(obs)), action(action), rew(rew), done(done), new_obs(std::move(new_obs)) {}
+        Transition(std::vector<float> obs, std::vector<float> new_obs, int64_t action, float rew, bool done)
+            : obs(std::move(obs)), new_obs(std::move(new_obs)), action(action), rew(rew), done(done) {}
     };
 
     class ReplayMemory
     {
         protected:
-            size_t batch_size = CONF::BS;
+            // size_t batch_size = CONF::BS;
             size_t buffer_size = CONF::MAX_MEM;
 
         public:
@@ -35,9 +35,8 @@ namespace replayMemory
 
         protected:
             virtual void store_transition(
-                std::vector<float>& obs, int64_t action, float rew, bool done, std::vector<float>& new_obs) = 0;
-            virtual void sample_transitions(
-                std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions) = 0;
+                std::vector<float>& obs, std::vector<float>& new_obs, int64_t action, float rew, bool done) = 0;
+            virtual const replayMemory::Transition& sample_transition() = 0;
     };
 
     class ReplayMemoryNaive : public replayMemory::ReplayMemory
@@ -49,9 +48,8 @@ namespace replayMemory
             ReplayMemoryNaive() = default;
 
             void store_transition(
-                std::vector<float>& obs, int64_t action, float rew, bool done, std::vector<float>& new_obs) override;
-            void sample_transitions(
-                std::vector<std::reference_wrapper<replayMemory::Transition>>& transitions) override;
+                std::vector<float>& obs, std::vector<float>& new_obs, int64_t action, float rew, bool done) override;
+            const replayMemory::Transition& sample_transition() override;
     };
 }
 
