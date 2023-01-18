@@ -10,6 +10,11 @@ network::Network::Network(const torch::Device& device)
     this->register_module("net", this->net);
 }
 
+torch::optim::Optimizer& network::Network::get_optimizer() const
+{
+    return *this->optimizer;
+}
+
 /*
 void Network::Net::example()
 {
@@ -44,7 +49,7 @@ torch::Tensor network::DeepQNetwork::forward(torch::Tensor x)
     return x;
 }
 
-int64_t network::DeepQNetwork::action(std::vector<float>& obs)
+size_t network::DeepQNetwork::action(std::vector<float>& obs)
 {
     auto obs_t = torch::from_blob(obs.data(), this->input_dim,
             torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
@@ -95,7 +100,7 @@ torch::Tensor network::DuelingDeepQNetwork::advantages(torch::Tensor x)
     return x;
 }
 
-int64_t network::DuelingDeepQNetwork::action(std::vector<float>& obs)
+size_t network::DuelingDeepQNetwork::action(std::vector<float>& obs)
 {
     auto obs_t = torch::from_blob(obs.data(), this->input_dim,
             torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);

@@ -77,6 +77,9 @@ namespace network
 
         public:
             Network(const torch::Device& device);
+            virtual ~Network() = default;
+
+            torch::optim::Optimizer& get_optimizer() const;
 
             // void example();
 
@@ -85,9 +88,9 @@ namespace network
             load
             */
 
-        protected:
+        public:
             virtual torch::Tensor forward(torch::Tensor x) = 0;
-            virtual int64_t action(std::vector<float>& obs) = 0;
+            virtual size_t action(std::vector<float>& obs) = 0;
     };
 
     class DeepQNetwork : public network::Network
@@ -99,7 +102,7 @@ namespace network
             DeepQNetwork(const torch::Device& device);
 
             torch::Tensor forward(torch::Tensor x) override;
-            int64_t action(std::vector<float>& obs) override;
+            size_t action(std::vector<float>& obs) override;
     };
 
     class DuelingDeepQNetwork : public network::Network
@@ -116,7 +119,7 @@ namespace network
             DuelingDeepQNetwork(const torch::Device& device);
 
             torch::Tensor forward(torch::Tensor x) override;
-            int64_t action(std::vector<float>& obs) override;
+            size_t action(std::vector<float>& obs) override;
     };
 }
 

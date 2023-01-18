@@ -35,6 +35,16 @@ struct DefaultConf{
     const static size_t BS;
     const static size_t MAX_MEM;
 
+    const static float GAMMA;
+    const static float EPS_START;
+    const static float EPS_MIN;
+    const static size_t EPS_DEC;
+    const static bool EPS_DEC_EXP;
+
+    const static size_t TARGET_UPDATE_FREQ;
+    const static bool TARGET_SOFT_UPDATE;
+    const static float TARGET_SOFT_UPDATE_TAU;
+
     const static std::vector<int64_t> INPUT_DIM;
 
     static void CTOR_NET(const std::vector<int64_t>& input_dim,
@@ -104,6 +114,24 @@ template<typename T>
 const size_t DefaultConf<T>::BS = 32;
 template<typename T>
 const size_t DefaultConf<T>::MAX_MEM = 1000000;
+
+template<typename T>
+const float DefaultConf<T>::GAMMA = 0.9f;
+template<typename T>
+const float DefaultConf<T>::EPS_START = 1.f;
+template<typename T>
+const float DefaultConf<T>::EPS_MIN = 0.01f;
+template<typename T>
+const size_t DefaultConf<T>::EPS_DEC = 2000000;
+template<typename T>
+const bool DefaultConf<T>::EPS_DEC_EXP = true;
+
+template<typename T>
+const size_t DefaultConf<T>::TARGET_UPDATE_FREQ = 30000;
+template<typename T>
+const bool DefaultConf<T>::TARGET_SOFT_UPDATE = true;
+template<typename T>
+const float DefaultConf<T>::TARGET_SOFT_UPDATE_TAU = 0.001f;
 
 template<typename T>
 const std::vector<int64_t> DefaultConf<T>::INPUT_DIM = { 3 };

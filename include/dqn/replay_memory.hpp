@@ -27,13 +27,13 @@ namespace replayMemory
     class ReplayMemory
     {
         protected:
-            // size_t batch_size = CONF::BS;
             size_t buffer_size = CONF::MAX_MEM;
 
         public:
             ReplayMemory() = default;
+            virtual ~ReplayMemory() = default;
 
-        protected:
+        public:
             virtual void store_transition(
                 std::vector<float>& obs, std::vector<float>& new_obs, int64_t action, float rew, bool done) = 0;
             virtual const replayMemory::Transition& sample_transition() = 0;
