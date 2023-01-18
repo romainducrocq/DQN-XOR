@@ -31,13 +31,13 @@ void agent::Agent::sample_transitions_t()
         torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
 
     this->actions_t = torch::from_blob(this->actions_.data(), { this->input_dim_bs[0] },
-        torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
+        torch::TensorOptions().dtype(torch::kInt64)).clone().to(this->device).unsqueeze(-1);
 
     this->rews_t = torch::from_blob(this->rews_.data(), { this->input_dim_bs[0] },
-        torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
+        torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device).unsqueeze(-1);
 
     this->dones_t = torch::from_blob(this->dones_.data(), { this->input_dim_bs[0] },
-        torch::TensorOptions().dtype(torch::kFloat32)).clone().to(this->device);
+        torch::TensorOptions().dtype(torch::kBool)).toType(torch::kFloat32).clone().to(this->device).unsqueeze(-1);
 }
 
 float agent::Agent::epsilon() const
@@ -93,10 +93,7 @@ void agent::SimpleAgent::learn()
         auto target_q_values = this->target_network->forward(this->new_obses_t);
         auto max_target_q_values = std::get<0>(target_q_values.max(1, true));
 
-
-        targets = max_target_q_values * this->gamma;
-        targets.index_put_({ this->dones_t }, 0.f);
-        targets += this->rews_t;
+        targets = this->rews_t + ((1.f - this->dones_t) * (max_target_q_values * this->gamma));
     }
 
     auto online_q_values = this->online_network->forward(this->obses_t);
@@ -129,9 +126,7 @@ void agent::DoubleAgent::learn()
         auto target_target_q_values = this->target_network->forward(this->new_obses_t);
         auto target_selected_q_values = torch::gather(target_target_q_values, 1, target_online_best_q_indices);
 
-        targets = target_selected_q_values * this->gamma;
-        targets.index_put_({ this->dones_t }, 0.f);
-        targets += this->rews_t;
+        targets = this->rews_t + ((1.f - this->dones_t) * (target_selected_q_values * this->gamma));
     }
 
     auto online_q_values = this->online_network->forward(this->obses_t);
